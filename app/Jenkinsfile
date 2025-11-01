@@ -6,35 +6,23 @@ pipeline {
         IMAGE_NAME = 'ashabtariq12/k8s-pod-metric-viewer'
         IMAGE_TAG = 'V1.0'
     }
-
     stages {
         stage('Checkout Code') {
             steps {
                 git branch: 'master', url: 'https://github.com/ashabtariq/k8s-pod-metrics-viewer.git'
             }
         }
-        
-        
-        
         stage('SonarQube Analysis') {
-    environment {
-        SONAR_HOST_URL = 'http://192.168.1.40:9000'
-        SONAR_PROJECT_KEY = 'K8S-Pods'
-    }
-    steps {
-        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-            sh '''
-            sonar-scanner \
-              -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.token=${SONAR_TOKEN}
-            '''
+            environment {
+                SONAR_HOST_URL = 'http://192.168.1.40:9000'
+                SONAR_PROJECT_KEY = 'K8S-Pods'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                    sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                }
+            }
         }
-    }
-}
-        
-
 
         stage('Go to Directory and Build') {
             steps {
@@ -47,8 +35,7 @@ pipeline {
                 '''
             }
         }
-        
-        
+
         stage('Push to Docker Hub') {
             steps {
                 sh '''
