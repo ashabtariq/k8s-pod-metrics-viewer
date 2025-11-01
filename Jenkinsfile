@@ -5,6 +5,9 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-login')
         IMAGE_NAME = 'ashabtariq12/k8s-pod-metric-viewer'
         IMAGE_TAG = 'V1.0'
+        SONAR_TOKEN = credentials('SONAR_TOKEN'}
+        SONAR_HOST_URL = 'http://192.168.1.40:9000'
+        SONAR_PROJECT_KEY = 'k8s-pods-metrics-viewer'
     }
     stages {
         stage('Checkout Code') {
@@ -14,20 +17,16 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-                SONAR_HOST_URL = 'http://192.168.1.40:9000'
-                SONAR_PROJECT_KEY = 'K8S-Pods'
-            }
             steps {
-                dir('k8s-pods-metrics-viewer')
-                {  // <-- path where sonar-project.properties exists
-                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')])
-                    {
-                        sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                dir('.') { // Make sure sonar-project.properties is here
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                            echo "Running SonarQube scan..."
+                            sonar-scanner -Dsonar.login=$SONAR_TOKEN
+                        '''
                     }
                 }
             }
-        }
 
         stage('Go to Directory and Build') {
             steps {
