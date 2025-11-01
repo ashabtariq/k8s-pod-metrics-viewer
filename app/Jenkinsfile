@@ -18,10 +18,11 @@ pipeline {
                 SONAR_PROJECT_KEY = 'K8S-Pods'
             }
             steps {
-                withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                dir('k8s-pods-metrics-viewer') {  // <-- path where sonar-project.properties exists
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                     sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
-                }
             }
+        }
         }
 
         stage('Go to Directory and Build') {
