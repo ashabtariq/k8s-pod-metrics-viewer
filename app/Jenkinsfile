@@ -12,17 +12,21 @@ pipeline {
                 git branch: 'master', url: 'https://github.com/ashabtariq/k8s-pod-metrics-viewer.git'
             }
         }
+
         stage('SonarQube Analysis') {
             environment {
                 SONAR_HOST_URL = 'http://192.168.1.40:9000'
                 SONAR_PROJECT_KEY = 'K8S-Pods'
             }
             steps {
-                dir('k8s-pods-metrics-viewer') {  // <-- path where sonar-project.properties exists
-                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                    sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                dir('k8s-pods-metrics-viewer')
+                {  // <-- path where sonar-project.properties exists
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')])
+                    {
+                        sh 'sonar-scanner -Dsonar.login=$SONAR_TOKEN'
+                    }
+                }
             }
-        }
         }
 
         stage('Go to Directory and Build') {
