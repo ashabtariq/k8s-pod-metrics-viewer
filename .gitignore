@@ -1,0 +1,73 @@
+# Python
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+*.egg-info/
+*.egg
+
+# Virtual environment
+env/
+venv/
+ENV/
+venv.bak/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib
+lib64
+parts/
+sdist/
+var/
+
+# Python specific logs and reports
+*.log
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+
+# Editors and IDEs
+.idea/  # JetBrains IDEs (PyCharm, etc)
+.vscode/ # VS Code
+*.swp
+*~
+.DS_Store # macOS system files
+
+# Environment variables
+.env
+.flaskenv
+
+# Kubernetes
+# Certificates and keys (if generated locally)
+*.pem
+*.crt
+*.key
+*.csr
+
+# Helm charts
+/helm-charts/*/charts
+/helm-charts/*/requirements.lock
+
+# Kustomize generated files (if not intended for version control)
+kustomization.yaml.tmp
+
+# Any local configuration files that should not be committed (e.g. specific kubeconfig files)
+kubeconfig
+*.kubeconfig
+
+# Terraform (if used alongside k8s)
+.terraform/
+*.tfplan
+*.tfstate
+*.tfstate.*
