@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Pod Status</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+</head>
+<body>
+    <h1>Hello from Kubernetes Cluster</h1>
+    <p>You are visitor number: {{count}}</p>
+    <br><br><br>
+    <h2>Real-time Pod Status and Counter</h2><br>
+    
+    <p class="text-center">Number of Pods: <span id="pod_count">0</span></p>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pod Name</th>
+                    <th>Status</th>
+                    <th>Pod IP</th>
+                    <th>CPU Usage</th>
+                    <th>Memory Usage</th>
+                </tr>
+            </thead>
+            <tbody id="pod_table_body">
+                <!-- Pod data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Include the Socket.IO client library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // Connect to the Socket.IO server
+        const socket = io();
+
+        // Listen for the 'pod_metrics' event from the server
+        socket.on('pod_metrics', function(data) {
+            const podTableBody = document.getElementById('pod_table_body');
+            const podCountSpan = document.getElementById('pod_count');
+            
+            // Clear the existing table rows
+            podTableBody.innerHTML = '';
+            
+            // Update the pod count
+            podCountSpan.textContent = data.pod_count;
+
+            // Populate the table with new data
+            if (data.pods.length > 0) {
+                data.pods.forEach(pod => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${pod.name}</td>
+                        <td>${pod.status}</td>
+                        <td>${pod.ip}</td>
+                        <td>${pod.cpu}</td>
+                        <td>${pod.memory}</td>
+                    `;
+                    podTableBody.appendChild(row);
+                });
+            } else {
+                // Display 'No pods found.' message if the list is empty
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="5" class="text-center">No pods found.</td>`;
+                podTableBody.appendChild(row);
+            }
+        });
+    </script>
+</body>
+</html>
