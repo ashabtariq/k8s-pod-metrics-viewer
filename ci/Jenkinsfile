@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-login')
         IMAGE_NAME = 'ashabtariq12/k8s-pod-metric-viewer'
         IMAGE_TAG = 'V1.0'
-        SONAR_TOKEN = credentials('SONAR_TOKEN'}
+        SONAR_TOKEN = credentials('SONAR_TOKEN')
         SONAR_HOST_URL = 'http://192.168.1.40:9000'
         SONAR_PROJECT_KEY = 'k8s-pods-metrics-viewer'
     }
