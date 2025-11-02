@@ -18,7 +18,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('.') { // Make sure sonar-project.properties is here
+                dir('/ci') { // Make sure sonar-project.properties is here
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh '''
                             echo "Running SonarQube scan..."
