@@ -9,6 +9,7 @@ pipeline {
         SONAR_HOST_URL = 'http://192.168.1.40:9000'
         SONAR_PROJECT_KEY = 'k8s-pods-metrics-viewer'
     }
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -18,7 +19,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('/ci') { // Make sure sonar-project.properties is here
+                dir('ci') { // Adjust this to where your sonar-project.properties file is
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh '''
                             echo "Running SonarQube scan..."
@@ -27,27 +28,36 @@ pipeline {
                     }
                 }
             }
+        }
 
-            stage('Go to Directory and Build') {
-                steps {
+        stage('Build Docker Image') {
+            steps {
+                dir('app') { // Navigate to the app directory
                     sh '''
-                    cd app || exit 1
-                    echo "Current directory: $(pwd)"
-                    # Now run commands in this directory
-                    ls -l
-                    docker build -t ashabtariq12/k8s-pod-metric-viewer:V1.0 .
-                '''
+                        echo "Current directory: $(pwd)"
+                        ls -l
+                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                    '''
                 }
             }
+        }
 
-            stage('Push to Docker Hub') {
-                steps {
-                    sh '''
+        stage('Push to Docker Hub') {
+            steps {
+                sh '''
                     echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
                     docker push ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
-                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully ✅'
+        }
+        failure {
+            echo 'Pipeline failed ❌'
         }
     }
 }
