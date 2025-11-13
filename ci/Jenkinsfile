@@ -53,9 +53,11 @@ pipeline {
 
         stage('Deploy to Minikube') {
             steps {
-                sh '''
+                dir('k8s') {
+                    sh '''
                     cd k8s && minikube kubectl apply -f
                 '''
+                }
             }
         }
     }
