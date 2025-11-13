@@ -55,7 +55,7 @@ pipeline {
             steps {
                 dir('k8s') {
                     sh '''
-                    cd k8s && minikube kubectl apply -f
+                    minikube kubectl apply -f .
                 '''
                 }
             }
