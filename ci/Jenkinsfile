@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy to Minikube') {
             steps {
-                sshagent(['minikube-id']) {
+                sshagent(['minikube-key']) {
                     sh 'ssh ashab@10.10.10.137 "cd k8s && kubectl apply -f stack.yaml"'
                 }
             }
