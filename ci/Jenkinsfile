@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent devopsbuildnode
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-login')
@@ -51,13 +51,13 @@ pipeline {
             }
         }
 
-    //     stage('Deploy to Minikube') {
-    //         steps {
-    //             sshagent(['minikube-key']) {
-    //                 sh 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ashab@10.10.10.137 "cd k8s && kubectl apply -f stack.yaml"'
-    //             }
-    //         }
-    //     }
+        stage('Deploy to Minikube') {
+            steps {
+                sh '''
+                    cd k8s && minikube kubectl apply -f
+                '''
+            }
+        }
     }
 
     post {
