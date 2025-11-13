@@ -21,6 +21,6 @@ COPY . .
 FROM gcr.io/distroless/python3-debian12
 
 WORKDIR /app
-COPY --from=builder /app /app
+COPY --from=builder /app .
 
 CMD ["python3", "app.py"]
