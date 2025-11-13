@@ -61,7 +61,7 @@ spec:
       serviceAccountName: pod-metrics-sa
       containers:
         - name: frontend
-          image: shabtariq12/k8s-pod-metric-viewer:V1.0
+          image: ashabtariq12/k8s-pod-metric-viewer:V1.0
           readinessProbe:
             httpGet:
               path: /
