@@ -50,6 +50,14 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy to Minikube') {
+            steps {
+                sshagent(['remote-minikube-server-credential-id']) {
+                    sh 'ssh ashab@10.10.10.137 "cd k8s && kubectl apply -f deployment.yaml"'
+                }
+            }
+        }
     }
 
     post {
