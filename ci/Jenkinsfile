@@ -51,14 +51,14 @@ pipeline {
             }
         }
 
-        stage('Deploy to Minikube') {
-            steps {
-                sshagent(['minikube-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ashab@10.10.10.137 "cd k8s && kubectl apply -f stack.yaml"'
-                }
-            }
-        }
-    }
+    //     stage('Deploy to Minikube') {
+    //         steps {
+    //             sshagent(['minikube-key']) {
+    //                 sh 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ashab@10.10.10.137 "cd k8s && kubectl apply -f stack.yaml"'
+    //             }
+    //         }
+    //     }
+    // }
 
     post {
         success {
